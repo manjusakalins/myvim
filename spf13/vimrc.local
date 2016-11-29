@@ -1,0 +1,38 @@
+"And then highlight something with the mouse and press Control-C to copy it.
+:vmap <C-C> "+y
+
+set shiftwidth=8                " Use indents of 4 spaces
+set expandtab                   " Tabs are spaces, not tabs
+set tabstop=8                   " An indentation every four columns
+set softtabstop=8               " Let backspace delete indent
+set wrap
+let g:ctrlp_max_height=35
+
+
+set t_Co=256 "如果是在模拟终端需要把颜色设置成256色
+highlight Comment ctermfg=green guifg=green
+"set background=dark        " Assume a dark background
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" cscope setting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("cscope")
+  set csprg=/usr/bin/cscope
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+      cs add cscope.out
+  endif
+  set csverb
+endif
+
+nmap <C-@>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
