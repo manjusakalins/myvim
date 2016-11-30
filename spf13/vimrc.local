@@ -50,3 +50,26 @@ nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 "for ctrlP fast plugin
 """
 let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+
+""""""""""""""""""""""""""""
+" for TagHighlight""
+"""""""""""""""""""""""""""
+"	Class           : Class
+"	DefinedName     : Define
+"	Enumerator      : Enumerator
+"	Function        : Function or method
+"	EnumerationName : Enumeration name
+"	Member          : Member (of structure or class)
+"	Structure       : Structure Name
+"	Type            : Typedef
+"	Union           : Union Name
+"	GlobalConstant  : Global Constant
+"	GlobalVariable  : Global Variable
+"	LocalVariable   : Local Variable
+hi Member ctermfg=Yellow guifg=lightyellow
+"hi Enumerator ctermfg=lightred guifg=lightred
+hi GlobalVariable ctermfg=DarkMagenta guifg=DarkMagenta
+hi DefinedName ctermfg=darkred guifg=darkred
+
+
+
