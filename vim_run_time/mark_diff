@@ -1,0 +1,12 @@
+" default colors/groups
+" you may define your own colors in you vimrc file, in the form as below:
+hi MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
+hi MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
+hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
+hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
+hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
+hi MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
+hi MarkWord7  ctermbg=LightYellow     ctermfg=Black  guibg=#CD7F32    guifg=Black
+hi MarkWord8  ctermbg=DarkBlue     ctermfg=Black  guibg=#FF7F00    guifg=Black
+hi MarkWord9  ctermbg=Brown     ctermfg=Black  guibg=#DB70DB    guifg=Black
+hi MarkWord10  ctermbg=DarkGreen     ctermfg=Black  guibg=#2B70DB    guifg=Black
