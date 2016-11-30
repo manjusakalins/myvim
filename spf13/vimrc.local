@@ -9,9 +9,18 @@ set wrap
 let g:ctrlp_max_height=35
 
 
-set t_Co=256 "如果是在模拟终端需要把颜色设置成256色
+"start for color and synatex
+if ! has("gui_running")
+    set t_Co=256
+endif
+" feel free to choose :set background=light for a different style
+"set background=dark
+"color peaksea
+"set t_Co=256 "如果是在模拟终端需要把颜色设置成256色
 highlight Comment ctermfg=green guifg=green
-"set background=dark        " Assume a dark background
+"highlight Constant ctermfg=magenta guifg=green
+highlight Normal ctermfg=lightgrey guifg=green
+highlight Structure ctermfg=red guifg=green
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " cscope setting
@@ -36,3 +45,8 @@ nmap <C-@>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"for ctrlP fast plugin
+"""
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }

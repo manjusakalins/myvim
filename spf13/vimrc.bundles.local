@@ -1,2 +1,6 @@
 Bundle 'TabBar'
 Bundle 'Mark'
+Bundle 'wesleyche/SrcExpl'
+Bundle 'peaksea'
+Bundle 'FelikZ/ctrlp-py-matcher'
+Bundle 'vim-scripts/TagHighlight'
