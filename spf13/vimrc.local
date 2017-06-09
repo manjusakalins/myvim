@@ -1,11 +1,15 @@
 "And then highlight something with the mouse and press Control-C to copy it.
-:vmap <C-C> "+y
+:vmap <C-C> "2y
+:nnoremap <C-V> "2p
 
 set shiftwidth=8                " Use indents of 4 spaces
-set expandtab                   " Tabs are spaces, not tabs
+set noexpandtab                 " Tabs are spaces, not tabs when set expandtab
 set tabstop=8                   " An indentation every four columns
 set softtabstop=8               " Let backspace delete indent
 set wrap
+set nolist "jlink we dont want to see the tab space etc.."
+"set listchars=trail:•,extends:#,nbsp:. " Highlight problematic whitespace
+
 let g:ctrlp_max_height=35
 
 
@@ -18,7 +22,7 @@ endif
 "color peaksea
 "set t_Co=256 "如果是在模拟终端需要把颜色设置成256色
 highlight Comment ctermfg=green guifg=green
-"highlight Constant ctermfg=magenta guifg=green
+highlight Constant ctermfg=magenta guifg=green
 highlight Normal ctermfg=lightgrey guifg=green
 highlight Structure ctermfg=red guifg=green
 
@@ -72,4 +76,51 @@ hi GlobalVariable ctermfg=DarkMagenta guifg=DarkMagenta
 hi DefinedName ctermfg=darkred guifg=darkred
 
 
+""""""""""""""""""""""""""""""""""""""
+"ariline
+"""""""""""""""""""""""""""""""
+" enable tabline
+let g:airline#extensions#tabline#enabled = 1
+" set left separator
+let g:airline#extensions#tabline#left_sep = ' '
+" set left separator which are not editting
+let g:airline#extensions#tabline#left_alt_sep = '|'
+" show buffer number
+let g:airline#extensions#tabline#buffer_nr_show = 1
+" jlink as we use tabbar so we close airline's bufferline
+let g:airline#extensions#bufferline#enabled = 0
+"let g:airline#extensions#bufferline#enabled = 1
+
+
+""""""""""""""""""""""""""""""""
+"tagbar
+""""""""""""""""""""""""""""""""
+"autocmd VimEnter * nested :call tagbar#autoopen(1)
+autocmd FileType c,cpp nested :TagbarOpen
+
+
+""""""""""""""""""""""""""""""""
+" indentGuide
+""""""""""""""""""""""""""""""""
+"as only space can set size to 1 we let space indent showup
+let g:indent_guides_guide_size = 1 "this is only for softtap(space), not hard tap
+let g:indent_guides_space_guides = 1 "jlink show up space indent
+let g:indent_guides_tab_guides = 0 "jlink not show up indent
+"let g:indent_guides_enable_on_vim_startup = 0
+
+
+""""""""""""""""""""""""""""""""
+"tabbar
+""""""""""""""""""""""""""""""""
+let g:Tb_MapCTabSwitchBufs = 1
+let g:Tb_DebugLevel = 10    " TabBar reports everything
+let g:Tb_DebugMode  = 1     " Writes to a file TabBarDBG.vim
+let g:Tb_cTabSwitchBufs = 1
+let g:Tb_MinSize = 2
+let g:maxTabWidth = 170
+"let g:Tb_cTabSwitchBufs=1
+noremap <Leader>bbb :TbToggle<CR>
+noremap <Leader>bbn :Tbbn<CR>
+noremap <Leader>bbp :Tbbp<CR>
+"nnoremap <tab> :call <SID>Bf_SwitchTo(v:count)<CR>:<BS>
 
