@@ -1,6 +1,6 @@
 "And then highlight something with the mouse and press Control-C to copy it.
 :vmap <C-C> "2y
-:nnoremap <C-V> "2p
+":nnoremap <C-V> "2p
 
 set shiftwidth=8                " Use indents of 4 spaces
 set noexpandtab                 " Tabs are spaces, not tabs when set expandtab
@@ -96,7 +96,7 @@ let g:airline#extensions#bufferline#enabled = 0
 "tagbar
 """"""""""""""""""""""""""""""""
 "autocmd VimEnter * nested :call tagbar#autoopen(1)
-autocmd FileType c,cpp nested :TagbarOpen
+"autocmd FileType c,cpp nested :TagbarOpen
 
 
 """"""""""""""""""""""""""""""""
@@ -122,5 +122,7 @@ let g:maxTabWidth = 170
 noremap <Leader>bbb :TbToggle<CR>
 noremap <Leader>bbn :Tbbn<CR>
 noremap <Leader>bbp :Tbbp<CR>
-"nnoremap <tab> :call <SID>Bf_SwitchTo(v:count)<CR>:<BS>
+" we add below to tabbar.vim to enable fast switch:
+"noremap <expr> t ':call <SID>Bf_SwitchTo('.v:count1.')<CR>:<BS>'
+"noremap <expr> <leader>t ':call <SID>Bf_SwitchTo('.nr2char(getchar()).')<CR>:<BS>'
 
