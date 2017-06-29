@@ -34,7 +34,7 @@ endif "%%
 " 5-9 = info ; 5 is the most important
 "  10 = Entry/Exit
 if !exists('g:Tb_DBG_LVL')
-      let g:Tb_DBG_LVL = 0
+      let g:Tb_DBG_LVL = 10
 endif" %%
 
 
@@ -408,6 +408,7 @@ function! <SID>Tb_Start(sticky, delBufNum)
     " delete the selected buffer.
     nnoremap <buffer> d :call <SID>Bf_DelWithD()<CR>:<BS>
 
+    nnoremap <buffer> f :call <SID>Bf_DelWithF()<CR>:<BS>
 
     " If you press w in the -TabBar- then switch back
     " to the previous window.
@@ -878,7 +879,8 @@ function! <SID>Bf_Choosed()
 
     let l:save_reg = @"
     let @" = ""
-    normal ""yi[
+    "manza copy the current position's str in []
+    normal ""yi[ 
     if @" != ""
         let l:retv = substitute(@",'\([0-9]*\):.*', '\1', '') + 0
         let @" = l:save_reg
@@ -1666,3 +1668,143 @@ endfunc " %%
 "       5.  noremap in vimrc to <C-TAB> to update the buffer list
 "       6.  noremap in vimrc to <?> to switch to -TabBar-
 "vim:foldmethod=marker vim:foldmarker=~~,%%
+
+function! <SID>Bf_DelWithF()
+    if g:Tb_DBG_LVL > 0
+        call <SID>DEBUG('ENTER: Bf_DelWithF() g:Tb_VimBufList =['. g:Tb_VimBufList.'] g:Tb_BufferMap=['.g:Tb_BufferMap.']',10)
+    endif
+
+    " Make sure we are in our window
+    if bufname('%') != '-TabBar-'
+        if g:Tb_DBG_LVL > 0
+            call <SID>DEBUG('EXIT : Bf_DelWithS not called in -TabBar-',1)
+        endif
+        return
+    endif
+
+    let l:selected_buf  =  <SID>Bf_Choosed()
+    let l:selected_buf  =  <SID>Map_Get_key( l:selected_buf )
+    if g:Tb_DBG_LVL > 0
+        call <SID>DEBUG('Bf_DelWithS: l:selected_buf=['.l:selected_buf.']',5)
+    endif
+    let l:selected_name = bufname(l:selected_buf +0 )
+    if g:Tb_DBG_LVL > 0
+        call <SID>DEBUG('Bf_DelWithS: l:selBufName=['. l:selected_name.']',5)
+    endif
+
+    let l:curLine    = line('.')
+    let l:curCol     = virtcol('.')
+    "make the filename an option
+    if l:selected_name == 'TabBar.DBG' && g:Tb_DBG_LVL > 0
+        if g:Tb_DBG_LVL > 0
+            call <SID>DEBUG('EXIT : Bf_DelWithS will not delete the debug window.',1)
+        endif
+        return
+    endif
+
+    let l:save_rep = &report
+    let l:save_sc  = &showcmd
+    let &report    = 10000
+    set noshowcmd
+
+
+    if l:selected_buf != -1 && l:selected_name != ""
+
+        " Don't want auto updates while we are processing a delete
+        " request.
+        let l:saveTb_AutoUpdt = g:Tb_AutoUpdt
+        let g:Tb_AutoUpdt = 0
+
+        " Save previous window so that if we show a buffer after
+        " deleting. The show will come up in the correct window.
+        wincmd p
+        let l:prevWin    = winnr()
+        let l:prevWinBuf = winbufnr(winnr())
+
+        if g:Tb_DBG_LVL > 0
+            call <SID>DEBUG('Bf_DelWithS: l:prevWin='.l:prevWin.' buffer in window: '.l:prevWinBuf,5)
+            call <SID>DEBUG('Bf_DelWithS: l:selected_name=<'.l:selected_name.'>: l:selected_buf=['.l:selected_buf.']',5)
+        endif
+
+        " If buffer is being displayed in a window then
+        " move window to a different buffer before
+        " deleting this one.
+        let l:winNum = (bufwinnr(l:selected_name) + 0)
+        " while we have windows that contain our buffer
+        while l:winNum != l:prevWin
+            if g:Tb_DBG_LVL > 0
+                call <SID>DEBUG('Bf_DelWithS: l:selected_buf='.l:selected_buf.' is being displayed in window: l:winNum='.l:winNum,5)
+            endif
+
+            " move to window that contains our selected buffer
+            exec l:prevWin.' wincmd w'
+	    exec "b!" . l:selected_buf
+
+            if g:Tb_DBG_LVL > 0
+                call <SID>DEBUG('Bf_DelWithS: We are now in window: '.winnr().' which contains buffer: '.bufnr('%').' and should contain buffer: '.l:selected_buf,5)
+            endif
+            "if l:origBuf == l:curBuf
+                " we wrapped so we are going to have to delete a buffer
+                " that is in an open window.
+                let l:winNum = l:prevWin
+            "else
+                " see if we have anymore windows with our selected buffer
+             "   let l:winNum = (bufwinnr(l:selected_name) + 0)
+            "endif
+        endwhile
+
+        " Attempt to restore previous window
+        if g:Tb_DBG_LVL > 0
+            call <SID>DEBUG('Bf_DelWithS: Restoring previous window to: '.l:prevWin,5)
+        endif
+        exec l:prevWin.' wincmd w'
+
+        " Try to get back to the -TabBar- window
+        let l:winNum = bufwinnr(bufnr('-TabBar-'))
+        if l:winNum != -1
+            exec l:winNum.' wincmd w'
+            if g:Tb_DBG_LVL > 0
+                call <SID>DEBUG('Bf_DelWithS: Got to -TabBar- window: '.winnr(),5)
+            endif
+        else
+            if g:Tb_DBG_LVL > 0
+                call <SID>DEBUG('Bf_DelWithS: Unable to get to -TabBar- window',1)
+            endif
+        endif
+
+        " Delete the buffer selected.
+        if g:Tb_DBG_LVL > 0
+            call <SID>DEBUG('Bf_DelWithS: About to delete buffer: '.l:selected_buf,5)
+        endif
+        " [displayed_buffer]-- [real_buffer] list
+        "let l:vimBuf = <SID>Map_Get_key( l:selected_buf )
+        "exec('silent! bd '.l:selected_buf )
+	"manza we now delete all other buffer
+	let l:NBuffers = bufnr('$')     " Get the number of the last buffer.
+	let l:i = 0                     " Set the buffer index to zero.
+
+	" Loop through every buffer less than the total number of buffers.
+	while( l:i <= l:NBuffers)
+		let l:i = l:i + 1
+		if l:i != l:selected_buf
+			exec('silent! bd '.l:i)
+		endif
+	endwhile
+
+        let g:Tb_AutoUpdt = l:saveTb_AutoUpdt
+        if g:Tb_DBG_LVL > 0
+            call <SID>DEBUG('Bf_DelWithS: current window=: '.bufname('%'),5)
+        endif
+        call <SID>Bf_SafePrint(-1)
+        call cursor(l:curLine, l:curCol)
+    endif
+
+    let &report  = l:save_rep
+    let &showcmd = l:save_sc
+
+    if g:Tb_DBG_LVL > 0
+        call <SID>DEBUG('EXIT : Bf_DelWithS() g:Tb_VimBufList =['. g:Tb_VimBufList.'] g:Tb_BufferMap=['.g:Tb_BufferMap.']',10)
+    endif
+endfunction " %%
+
+
