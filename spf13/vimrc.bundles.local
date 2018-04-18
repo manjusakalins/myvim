@@ -1,4 +1,6 @@
-Bundle 'TabBar'
+"Bundle 'TabBar'
+Bundle 'manjusakalins/TabBar'
+Bundle 'manjusakalins/sessionman.vim'
 Bundle 'Mark'
 Bundle 'wesleyche/SrcExpl'
 Bundle 'peaksea'
