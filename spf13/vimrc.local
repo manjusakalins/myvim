@@ -184,3 +184,4 @@ au BufNewFile,BufRead *.py
 
 
 let @m = "printk(\"============ %s %d ==========\\n\", __func__, __LINE__);"
+let g:NERDCustomDelimiters = { 'c': { 'left': '//' } }
